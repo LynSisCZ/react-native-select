@@ -39,6 +39,18 @@ export const useSearch = ({
       return flatList.filter((item: TFlatListItem) => {
         const labelValue = item[optionLabel]?.toString();
         const valueValue = item[optionValue]?.toString();
+        if (typeof valueValue === 'string') {
+          console.log(normalizeDiacritics(valueValue).toLowerCase());
+          console.log(
+            normalizeDiacritics(valueValue).toLowerCase().search(regexFilter)
+          );
+        }
+        if (typeof labelValue === 'string') {
+          console.log(normalizeDiacritics(labelValue).toLowerCase());
+          console.log(
+            normalizeDiacritics(labelValue).toLowerCase().search(regexFilter)
+          );
+        }
 
         return (
           (labelValue &&
@@ -73,7 +85,7 @@ export const useSearch = ({
       const searchText = normalizeDiacritics(escapeRegExp(value))
         .toLowerCase()
         .trim();
-
+      console.log(searchText);
       const regexFilter = new RegExp(searchText, 'i');
 
       const searchResults = isSection
