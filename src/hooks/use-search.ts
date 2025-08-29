@@ -65,7 +65,12 @@ export const useSearch = ({
     (value: string) => {
       searchCallback?.(value);
 
-      const searchText = escapeRegExp(value).toLowerCase().trim();
+      const searchText = escapeRegExp(value)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+
       const regexFilter = new RegExp(searchText, 'i');
 
       const searchResults = isSection
