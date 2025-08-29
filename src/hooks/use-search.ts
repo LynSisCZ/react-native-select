@@ -39,25 +39,16 @@ export const useSearch = ({
       return flatList.filter((item: TFlatListItem) => {
         const labelValue = item[optionLabel]?.toString();
         const valueValue = item[optionValue]?.toString();
-        if (typeof valueValue === 'string') {
-          console.log(normalizeDiacritics(valueValue).toLowerCase());
-          console.log(
-            normalizeDiacritics(valueValue).toLowerCase().search(regexFilter)
-          );
-        }
-        if (typeof labelValue === 'string') {
-          console.log(normalizeDiacritics(labelValue).toLowerCase());
-          console.log(
-            normalizeDiacritics(labelValue).toLowerCase().search(regexFilter)
-          );
-        }
 
         return (
           (labelValue &&
             normalizeDiacritics(labelValue)
               .toLowerCase()
               .search(regexFilter) !== -1) ||
-          (valueValue && valueValue.toLowerCase().search(regexFilter) !== -1)
+          (valueValue &&
+            normalizeDiacritics(valueValue)
+              .toLowerCase()
+              .search(regexFilter) !== -1)
         );
       });
     },
