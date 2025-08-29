@@ -5,7 +5,7 @@ import type {
   TFlatListItem,
   TSectionListItem,
 } from '../types/index.types';
-import { escapeRegExp, isSectionList } from '../utils';
+import { escapeRegExp, isSectionList, normalizeDiacritics } from '../utils';
 
 interface UseSearchProps {
   initialOptions: TFlatList | TSectionList;
@@ -37,10 +37,15 @@ export const useSearch = ({
   const searchFlatList = useCallback(
     (flatList: TFlatList, regexFilter: RegExp) => {
       return flatList.filter((item: TFlatListItem) => {
+        const labelValue = item[optionLabel]?.toString();
+        const valueValue = item[optionValue]?.toString();
+
         return (
-          item[optionLabel]?.toString().toLowerCase().search(regexFilter) !==
-            -1 ||
-          item[optionValue]?.toString().toLowerCase().search(regexFilter) !== -1
+          (labelValue &&
+            normalizeDiacritics(labelValue)
+              .toLowerCase()
+              .search(regexFilter) !== -1) ||
+          (valueValue && valueValue.toLowerCase().search(regexFilter) !== -1)
         );
       });
     },
@@ -65,9 +70,7 @@ export const useSearch = ({
     (value: string) => {
       searchCallback?.(value);
 
-      const searchText = escapeRegExp(value)
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
+      const searchText = normalizeDiacritics(escapeRegExp(value))
         .toLowerCase()
         .trim();
 

@@ -11,6 +11,9 @@ export const extractPropertyFromArray = (arr: any[], property: string) => {
 export const escapeRegExp = (text: string) => {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
+export const normalizeDiacritics = (text: string) => {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};
 
 export const removeDisabledItems = (items: TFlatList) => {
   return items?.filter((item: TFlatListItem) => !item.disabled);
